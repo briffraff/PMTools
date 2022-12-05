@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolderGenerator", "FolderGenerator\FolderGenerator.csproj", "{C41C2334-78AC-4018-B963-D97F175CD491}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TODO", "TODO", "{80243D40-5570-4235-840A-DDAEDDCA7DEA}"
+	ProjectSection(SolutionItems) = preProject
+		done-fix.txt = done-fix.txt
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMToolsBase", "PMToolsBase\PMToolsBase.csproj", "{0C268820-8E7F-45A0-8F03-878FCAE729E7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Global", "Global\Global.csproj", "{3A5D683A-C45D-46D0-B327-3193BD145E1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OldButGold", "OldButGold\OldButGold.csproj", "{79A3856C-BE23-4FC4-BFD4-4108B9BFD183}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetAssets", "GetRenders\GetAssets.csproj", "{44B9F2B9-7EA6-4C0B-8A27-F90C00AE70D7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C41C2334-78AC-4018-B963-D97F175CD491}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C41C2334-78AC-4018-B963-D97F175CD491}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C41C2334-78AC-4018-B963-D97F175CD491}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C41C2334-78AC-4018-B963-D97F175CD491}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C268820-8E7F-45A0-8F03-878FCAE729E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C268820-8E7F-45A0-8F03-878FCAE729E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C268820-8E7F-45A0-8F03-878FCAE729E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C268820-8E7F-45A0-8F03-878FCAE729E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A5D683A-C45D-46D0-B327-3193BD145E1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A5D683A-C45D-46D0-B327-3193BD145E1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A5D683A-C45D-46D0-B327-3193BD145E1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A5D683A-C45D-46D0-B327-3193BD145E1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79A3856C-BE23-4FC4-BFD4-4108B9BFD183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79A3856C-BE23-4FC4-BFD4-4108B9BFD183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79A3856C-BE23-4FC4-BFD4-4108B9BFD183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79A3856C-BE23-4FC4-BFD4-4108B9BFD183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44B9F2B9-7EA6-4C0B-8A27-F90C00AE70D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44B9F2B9-7EA6-4C0B-8A27-F90C00AE70D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44B9F2B9-7EA6-4C0B-8A27-F90C00AE70D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44B9F2B9-7EA6-4C0B-8A27-F90C00AE70D7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {461352D0-B5DC-4657-A0BA-BD693108B0D4}
+	EndGlobalSection
+EndGlobal
