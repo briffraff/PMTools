@@ -1,8 +1,4 @@
-.txt
-vendor
-.idea
 bin
 obj
 .vs
-node_modules
 *.txt
