@@ -6,7 +6,7 @@ namespace PMToolsBase
     {
         static void Main(string[] args)
         {
-            //string connectionString = "APIKey=keys6KaOJAsbRXStR; BaseId=appSjOiqevcG5pX1B; TableNames=SP21_Test; ViewNames=SP21_Test.Grid view;";
+            //string connectionString = "APIKey=; BaseId=; TableNames=SP21_Test; ViewNames=SP21_Test.Grid view;";
             
 
             //// A I R T A B L E
@@ -16,8 +16,8 @@ namespace PMToolsBase
             //builder.ConnectionString = "";
             ////Now that the connection string has been parsed,
             //// you can work with individual items:
-            //builder.ApiKey = "keys6KaOJAsbRXStR";
-            //builder.BaseId = "appSjOiqevcG5pX1B";
+            //builder.ApiKey = "";
+            //builder.BaseId = "";
             //builder.TableNames = "SP21_Test";
             //builder.ViewNames = "SP21_Test.Grid view";
 
