@@ -21,26 +21,16 @@ namespace GetAssets
             var root = _input.ValidateRootDestination();
 
             // list of renders to be collected
-            var externalRenderList = _gc.ExternalRenderList;
-            if (!File.Exists(externalRenderList))
-            {
-                Console.WriteLine("External render list is not exist!");
-                Environment.Exit(0);
-            }
 
             Console.WriteLine(_gc.getAssetsOptions);
             string option = _input.Option();
 
             ////TODO if need set path where to transfer folder
-
             // renders will be transfered here
             //Console.WriteLine("\nDo you want to use default collection folder ? [ y , n ]");
             // зависимост от името на логнатия юзър
             // дефолтен път
             // ако не е дефолтен път ,да се добавя допълнително
-
-            var rendersCollectionFolder = _gc.RendersCollectionFolder;
-
 
             // GET!
             Console.WriteLine();
@@ -55,13 +45,13 @@ namespace GetAssets
                 if (option == "1" || option == "2" || option == "2") 
                 {
                     // GET RENDERS
-                    collect.Renders(externalRenderList, rendersCollectionFolder);
+                    collect.Renders(_gc.ExternalRenderList, _gc.RendersCollectionFolder);
                 }
 
                 if(option == "4")
                 {
                     // GET OBJS
-                    collect.Objs();
+                    collect.Objs(_gc.ExternalObjList,_gc.ObjsCollectionFolder);
                 }
 
                 if(option == "5")

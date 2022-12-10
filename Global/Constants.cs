@@ -22,7 +22,7 @@ namespace Global
 
         // folders
         // Script/
-        public string scriptFolder = @"C:\Users\riffraff\Desktop\Test";
+        public string scriptFolder = @"C:\Users\riffraff\Desktop\New folder\Test";
         // Script/Config 
         public string ConfigFolder => scriptFolder + @"\PMTools\Config";
 
@@ -57,12 +57,14 @@ namespace Global
         // regex
         public string correctFullPathAndRenderNameRegex = @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)$";
         public string correctRenderName = @"(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)";
+        public string correctFullPathAndObjNameRegex = @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<cameraMarker>[S,M,L,D]{1,})(?<extension>.obj)$";
 
         public string pngPattern = "*.png";
         public string renderExtension = ".png";
         public string objExtension = ".obj";
-        public string workingFiles = ".zprj";
+        public string workingFiles = ".Zprj";
         public string renderFolder = @"\09_Renders";
+        public string forRenderingFolder = @"\07_For_Rendering";
         public string oldFolder = @"\Old";
         public string archiveFolder = @"\Archive";
 

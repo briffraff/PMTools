@@ -32,6 +32,12 @@ namespace GetAssets.Output
 
         internal void Renders(string externalRenderList, string rendersCollectionFolder)
         {
+            if (!File.Exists(externalRenderList))
+            {
+                Console.WriteLine("External render list is not exist!");
+                Environment.Exit(0);
+            }
+
             _notTransfered.Clear();
             //VARS
             var png = _gc.renderExtension;
@@ -49,7 +55,7 @@ namespace GetAssets.Output
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
-            FillRenders(correctRenders, renders);
+            FillAssets(correctRenders, renders);
 
             // OPTION 1
             if (_option == "1")
@@ -142,9 +148,55 @@ namespace GetAssets.Output
             NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
-        internal void Objs()
+        internal void Objs(string externalObjFile, string objCollectionFolder)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(externalObjFile))
+            {
+                Console.WriteLine("External obj list is not exist!");
+                Environment.Exit(0);
+            }
+
+            _notTransfered.Clear();
+            //VARS
+            var obj = _gc.objExtension;
+            
+            var regex = new Regex(_gc.correctFullPathAndObjNameRegex);
+            var objs = new Dictionary<string, string>();
+            objs.Clear();
+
+            //filter all files from 09_Renders folder which is correct
+            var correctAssets = AllFiles
+                .Select(x => x.Trim())
+                .Where(x => x.Contains(obj))
+                .Where(x => regex.IsMatch(x))
+                .Where(x => x.Contains(_gc.forRenderingFolder))
+                .Where(x => !x.Contains(_gc.oldFolder) || !x.Contains(_gc.archiveFolder))
+                .ToHashSet();
+
+            // collect all renders with proper names in a dictionary string,string
+            FillAssets(correctAssets, objs);
+
+            // OPTION 4
+            if (_option == "4")
+            {
+                foreach (var item in objs.Values)
+                {
+                    var filename = Path.GetFileName(item);
+                    var transferTo = Path.Combine(objCollectionFolder, filename);
+
+                    //if exists then transfer to "objCollectionFolder"
+                    if (objs.ContainsKey(Path.GetFileNameWithoutExtension(filename)))
+                    {
+                        Transfer(item, transferTo);
+                    }
+                    else
+                    {
+                        _notTransfered.AppendLine($"{filename} : Not transferred\n");
+                    }
+                }
+            }
+
+            NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
         internal void WorkingFiles()
@@ -152,7 +204,7 @@ namespace GetAssets.Output
             throw new NotImplementedException();
         }
 
-        private static void FillRenders(HashSet<string> correctRenders, Dictionary<string, string> renders)
+        private static void FillAssets(HashSet<string> correctRenders, Dictionary<string, string> renders)
         {
             // collect all renders with proper names in a dictionary string,string
             foreach (var render in correctRenders)
@@ -162,13 +214,16 @@ namespace GetAssets.Output
                 //C:\example\ad\asd\asd\
                 var renderPath = Path.GetDirectoryName(render);
                 //123345
-                var sku = filename.Split("_", StringSplitOptions.RemoveEmptyEntries)[0];
-
-                // if sku is element of the renderPath - that means that file is coming from the right folder
-                // && if filename is not contains in renders dict
-                if (renderPath != null && renderPath.Contains(sku) && !renders.ContainsKey(filename))
+                if (filename.Contains("_"))
                 {
-                    renders[filename] = render;
+                    var sku = filename.Split("_", StringSplitOptions.RemoveEmptyEntries)[0];
+
+                    // if sku is element of the renderPath - that means that file is coming from the right folder
+                    // && if filename is not contains in renders dict
+                    if (renderPath != null && renderPath.Contains(sku) && !renders.ContainsKey(filename))
+                    {
+                        renders[filename] = render;
+                    }
                 }
             }
         }
