@@ -179,6 +179,7 @@ namespace GetAssets.Output
             // OPTION 4
             if (_option == "4")
             {
+                // TODO - Working/Read external obj file
                 foreach (var item in objs.Values)
                 {
                     var filename = Path.GetFileName(item);
