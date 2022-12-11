@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -159,7 +160,7 @@ namespace GetAssets.Output
             _notTransfered.Clear();
             //VARS
             var obj = _gc.objExtension;
-            
+
             var regex = new Regex(_gc.correctFullPathAndObjNameRegex);
             var objs = new Dictionary<string, string>();
             objs.Clear();
@@ -179,20 +180,20 @@ namespace GetAssets.Output
             // OPTION 4
             if (_option == "4")
             {
-                // TODO - Working/Read external obj file
-                foreach (var item in objs.Values)
-                {
-                    var filename = Path.GetFileName(item);
-                    var transferTo = Path.Combine(objCollectionFolder, filename);
+                string[] text = File.ReadAllLines(externalObjFile).Distinct().ToArray();
 
-                    //if exists then transfer to "objCollectionFolder"
-                    if (objs.ContainsKey(Path.GetFileNameWithoutExtension(filename)))
+                foreach (var row in text)
+                {
+                    var found = objs.Keys.FirstOrDefault(o => o.StartsWith(row));
+                    if (found != null)
                     {
-                        Transfer(item, transferTo);
+                        var filename = found + _gc.objExtension;
+                        var transferTo = Path.Combine(objCollectionFolder, filename);
+                        Transfer(objs[found], transferTo);
                     }
                     else
                     {
-                        _notTransfered.AppendLine($"{filename} : Not transferred\n");
+                        _notTransfered.AppendLine($"{row} : Not transferred\n");
                     }
                 }
             }
@@ -205,15 +206,15 @@ namespace GetAssets.Output
             throw new NotImplementedException();
         }
 
-        private static void FillAssets(HashSet<string> correctRenders, Dictionary<string, string> renders)
+        private static void FillAssets(HashSet<string> correctAssets, Dictionary<string, string> assets)
         {
             // collect all renders with proper names in a dictionary string,string
-            foreach (var render in correctRenders)
+            foreach (var asset in correctAssets)
             {
                 //123345_W_5_50
-                var filename = Path.GetFileNameWithoutExtension(render);
+                var filename = Path.GetFileNameWithoutExtension(asset);
                 //C:\example\ad\asd\asd\
-                var renderPath = Path.GetDirectoryName(render);
+                var assetPath = Path.GetDirectoryName(asset);
                 //123345
                 if (filename.Contains("_"))
                 {
@@ -221,9 +222,9 @@ namespace GetAssets.Output
 
                     // if sku is element of the renderPath - that means that file is coming from the right folder
                     // && if filename is not contains in renders dict
-                    if (renderPath != null && renderPath.Contains(sku) && !renders.ContainsKey(filename))
+                    if (assetPath != null && assetPath.Contains(sku) && !assets.ContainsKey(filename))
                     {
-                        renders[filename] = render;
+                        assets[filename] = asset;
                     }
                 }
             }
