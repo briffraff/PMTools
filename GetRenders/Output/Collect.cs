@@ -201,9 +201,56 @@ namespace GetAssets.Output
             NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
-        internal void WorkingFiles()
+        internal void CloFiles(string externalCloFilesFile, string cloFilesCollectionFolder)
         {
-            throw new NotImplementedException();
+            if (!File.Exists(externalCloFilesFile))
+            {
+                Console.WriteLine("External clo files list is not exist!");
+                Environment.Exit(0);
+            }
+
+            _notTransfered.Clear();
+            //VARS
+            var cloFiles = _gc.cloExtension;
+
+            var regex = new Regex(_gc.correctFullPathAndCloFileNameRegex);
+            var clos = new Dictionary<string, string>();
+            clos.Clear();
+
+            //filter all files from 09_Renders folder which is correct
+            var correctAssets = AllFiles
+                .Select(x => x.Trim())
+                .Where(x => x.ToLower().Contains(cloFiles))
+                .Where(x => regex.IsMatch(x))
+                .Where(x => x.Contains(_gc.cloFilesFolder))
+                .Where(x => !x.Contains(_gc.oldFolder) || !x.Contains(_gc.archiveFolder))
+                .ToHashSet();
+
+            // collect all renders with proper names in a dictionary string,string
+            FillAssets(correctAssets, clos); //TODO
+
+            // OPTION 4
+            if (_option == "5")
+            {
+                string[] text = File.ReadAllLines(externalCloFilesFile).Distinct().ToArray();
+
+                foreach (var row in text)
+                {
+                    var found = clos.Keys.FirstOrDefault(key => key.Contains(row));
+                    if (found != null)
+                    {
+                        var filename = found + _gc.cloExtension;
+                        var transferTo = Path.Combine(cloFilesCollectionFolder, filename);
+                        Transfer(clos[found], transferTo);
+                    }
+                    else
+                    {
+                        _notTransfered.AppendLine($"{row} : Not transferred\n");
+                    }
+                }
+            }
+
+            NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
         private static void FillAssets(HashSet<string> correctAssets, Dictionary<string, string> assets)

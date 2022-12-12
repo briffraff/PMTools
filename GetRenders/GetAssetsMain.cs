@@ -57,7 +57,7 @@ namespace GetAssets
                 if(option == "5")
                 {
                     // GET WORKING FILES
-                    collect.WorkingFiles();
+                    collect.CloFiles(_gc.ExternalCloFilesList, _gc.CloFilesCollectionFolder);
                 }
  
                 //DONE

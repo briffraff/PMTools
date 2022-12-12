@@ -36,7 +36,7 @@ namespace PMToolsBase
             {
                 _gc.RendersCollectionFolder,
                 _gc.ObjsCollectionFolder,
-                _gc.WorkingFilesCollectionFolder
+                _gc.CloFilesCollectionFolder
             };
 
             string[] configFolders =
@@ -53,7 +53,7 @@ namespace PMToolsBase
                 _gc.ExternalToBeFolderList,
                 _gc.ExternalRenderList,
                 _gc.ExternalObjList,
-                _gc.ExternalWorkFilesList,
+                _gc.ExternalCloFilesList,
                 _gc.NotTransferredFileList
             };
 

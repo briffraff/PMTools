@@ -43,7 +43,7 @@ namespace Global
         // Config/GetAssets
         public string GetAssetsFolder => ConfigFolder + @"\GetAssets";
         //// files
-        public string ExternalWorkFilesList => GetAssetsFolder + @"\getWorkFiles.txt";
+        public string ExternalCloFilesList => GetAssetsFolder + @"\getCloFiles.txt";
         public string ExternalObjList => GetAssetsFolder + @"\getObjs.txt";
         public string ExternalRenderList => GetAssetsFolder + @"\getRenders.txt";
         public string NotTransferredFileList => GetAssetsFolder + @"\notTransfered.txt";
@@ -52,19 +52,25 @@ namespace Global
         public string OutputCollectionsFolder => scriptFolder;
         public string RendersCollectionFolder => OutputCollectionsFolder + @"\Collections\renders";
         public string ObjsCollectionFolder => OutputCollectionsFolder + @"\Collections\objs";
-        public string WorkingFilesCollectionFolder => OutputCollectionsFolder + @"\Collections\working files";
+        public string CloFilesCollectionFolder => OutputCollectionsFolder + @"\Collections\clo files";
 
         // regex
-        public string correctFullPathAndRenderNameRegex = @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)$";
-        public string correctRenderName = @"(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)";
-        public string correctFullPathAndObjNameRegex = @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<cameraMarker>[S,M,L,D]{1,})(?<extension>.obj)$";
+        public string correctFullPathAndRenderNameRegex = 
+            @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)$";
+        public string correctRenderName = 
+            @"(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)";
+        public string correctFullPathAndObjNameRegex = 
+            @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<cameraMarker>[S,M,L,D]{1,})(?<extension>.obj)$";
+        public string correctFullPathAndCloFileNameRegex =
+            @"^(?<path>.:\\.+\\)?(?<geometry>[A-Z0-9]+)_(?<sku>[0-9A-Za-z]+)_(?<garmentInfo>[A-Za-z0-9_]+)_(?<variation>[0-9]{1})(?<extension>.zprj)$";
 
         public string pngPattern = "*.png";
         public string renderExtension = ".png";
         public string objExtension = ".obj";
-        public string workingFiles = ".Zprj";
+        public string cloExtension = ".zprj";
         public string renderFolder = @"\09_Renders";
         public string forRenderingFolder = @"\07_For_Rendering";
+        public string cloFilesFolder = @"\02_CloFiles";
         public string oldFolder = @"\Old";
         public string archiveFolder = @"\Archive";
 
