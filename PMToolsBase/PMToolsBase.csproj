@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FolderGenerator\FolderGenerator.csproj" />
-    <ProjectReference Include="..\GetRenders\GetAssets.csproj" />
+    <ProjectReference Include="..\GetAssets\GetAssets.csproj" />
     <ProjectReference Include="..\Global\Global.csproj" />
     <ProjectReference Include="..\OldButGold\OldButGold.csproj" />
   </ItemGroup>
