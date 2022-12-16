@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace GetRenders
+﻿namespace GetAssets
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            
         }
     }
 }

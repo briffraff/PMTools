@@ -227,7 +227,7 @@ namespace GetAssets.Output
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
-            FillAssets(correctAssets, clos); //TODO
+            FillAssets(correctAssets, clos);
 
             // OPTION 4
             if (_option == "5")

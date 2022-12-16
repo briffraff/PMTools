@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 
 namespace Global
@@ -22,9 +23,10 @@ namespace Global
 
         // folders
         // Script/
-        public string scriptFolder = @"C:\Users\riffraff\Desktop\New folder\Test";
+        //public string scriptFolder = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\PMTools\Agron";
+        public string testFolder = @$"C:\Users\{string.Format(Environment.UserName)}\Desktop\PMTools\Agron";
         // Script/Config 
-        public string ConfigFolder => scriptFolder + @"\PMTools\Config";
+        public string ConfigFolder => testFolder + @"\Config";
 
 
         //  "F o l d e r   G e n e r a t o r"
@@ -49,7 +51,7 @@ namespace Global
         public string NotTransferredFileList => GetAssetsFolder + @"\notTransfered.txt";
 
         // OUTPUT
-        public string OutputCollectionsFolder => scriptFolder;
+        public string OutputCollectionsFolder => testFolder;
         public string RendersCollectionFolder => OutputCollectionsFolder + @"\Collections\renders";
         public string ObjsCollectionFolder => OutputCollectionsFolder + @"\Collections\objs";
         public string CloFilesCollectionFolder => OutputCollectionsFolder + @"\Collections\clo files";
@@ -62,7 +64,7 @@ namespace Global
         public string correctFullPathAndObjNameRegex = 
             @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<cameraMarker>[S,M,L,D]{1,})(?<extension>.obj)$";
         public string correctFullPathAndCloFileNameRegex =
-            @"^(?<path>.:\\.+\\)?(?<geometry>[A-Z0-9]+)_(?<sku>[0-9A-Za-z]+)_(?<garmentInfo>[A-Za-z0-9_]+)_(?<variation>[0-9]{1})(?<extension>.zprj)$";
+            @"^(?<path>.:\\.+\\)?(?<geometry>[A-Z0-9]+)_(?<sku>[0-9A-Za-z]+)_(?<garmentInfo>[A-Za-z0-9_\-\s]+)_(?<variation>[0-9]{1})(?<extension>.zprj)$";
 
         public string pngPattern = "*.png";
         public string renderExtension = ".png";
