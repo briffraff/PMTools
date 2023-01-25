@@ -1,8 +1,10 @@
 ﻿using Global;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -46,13 +48,38 @@ namespace GetAssets.Output
             var renders = new Dictionary<string, string>();
             renders.Clear();
 
+            // is png , trimmed path , match regex
+
+            //var filter2 = _gc.NotAllowedFolders.Select(f => filter1.Any(p => !p.Contains(f))).ToHashSet();
+            //var filter3 = filter1.Where(p => !_gc.NotAllowedFolders.Any(f => p.ToUpper().Contains(f.ToUpper()))).ToHashSet();
+            //var filter4 = filter1.Where(p => !p.Contains("OLD")).ToHashSet();
+            //var filter5 = filter1.Where(x => _gc.NotAllowedFolders.Any(isAllowed(x))).ToHashSet();
+
             //filter all files from 09_Renders folder which is correct
-            var correctRenders = AllFiles
+            var filter1 = AllFiles
                 .Select(x => x.Trim())
                 .Where(x => x.Contains(png))
                 .Where(x => regex.IsMatch(x))
+                .ToHashSet();
+
+            var correctRenders = filter1
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7].ToUpper()))
                 .Where(x => x.Contains(_gc.renderFolder))
-                .Where(x => !x.Contains(_gc.oldFolder) || !x.Contains(_gc.archiveFolder))
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
@@ -82,7 +109,7 @@ namespace GetAssets.Output
                 foreach (var row in text)
                 {
                     var filename = "";
-                    var split = row.Split(",", StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
+                    var split = row.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
                     var sku = "";
                     var colorCode = "";
                     var variation = "";
@@ -92,13 +119,16 @@ namespace GetAssets.Output
                     {
                         sku = split[0];
                         colorCode = split[1];
-                        view = "50";
+
+                        if (split.Length == 2)
+                        {
+                            filenames.Add(sku + "_" + colorCode + "_" + "50");
+                            filenames.Add(sku + "_" + colorCode + "_" + "60");
+                        }
                         if (split.Length == 3)
                         {
-                            view = split[2];
+                            filenames.Add(sku + "_" + colorCode + "_" + split[2]);
                         }
-                        filename = sku + "_" + colorCode + "_" + view;
-                        filenames.Add(filename);
                     }
                     else if (split.Length > 3)
                     {
@@ -166,12 +196,30 @@ namespace GetAssets.Output
             objs.Clear();
 
             //filter all files from 09_Renders folder which is correct
-            var correctAssets = AllFiles
+            var filter1 = AllFiles
                 .Select(x => x.Trim())
                 .Where(x => x.Contains(obj))
                 .Where(x => regex.IsMatch(x))
+                .ToHashSet();
+
+            var correctAssets = filter1
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7].ToUpper()))
                 .Where(x => x.Contains(_gc.forRenderingFolder))
-                .Where(x => !x.Contains(_gc.oldFolder) || !x.Contains(_gc.archiveFolder))
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
@@ -201,6 +249,22 @@ namespace GetAssets.Output
             NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
+        //internal Func<string, bool> isAllowed(string path)
+        //{
+        //    bool answer = false;
+
+        //    foreach (var folder in _gc.NotAllowedFolders)
+        //    {
+        //        if (path.Contains(folder))
+        //        {
+        //            answer = true;
+        //            break;  
+        //        }
+        //    }
+
+        //    return answer;
+        //}
+
         internal void CloFiles(string externalCloFilesFile, string cloFilesCollectionFolder)
         {
             if (!File.Exists(externalCloFilesFile))
@@ -218,12 +282,31 @@ namespace GetAssets.Output
             clos.Clear();
 
             //filter all files from 09_Renders folder which is correct
-            var correctAssets = AllFiles
+
+            var filter1 = AllFiles
                 .Select(x => x.Trim())
-                .Where(x => x.ToLower().Contains(cloFiles))
+                .Where(x => x.Contains(cloFiles))
                 .Where(x => regex.IsMatch(x))
+                .ToHashSet();
+
+            var correctAssets = filter1
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7]))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[0].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[1].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[2].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[3].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[4].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[5].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[6].ToUpper()))
+                .Where(x => !x.Contains(_gc.NotAllowedFolders[7].ToUpper()))
                 .Where(x => x.Contains(_gc.cloFilesFolder))
-                .Where(x => !x.Contains(_gc.oldFolder) || !x.Contains(_gc.archiveFolder))
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string

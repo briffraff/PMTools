@@ -23,10 +23,10 @@ namespace Global
 
         // folders
         // Script/
-        //public string scriptFolder = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\PMTools\Agron";
+        public string scriptFolder = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\PMTools\Agron";
         public string testFolder = @$"C:\Users\{string.Format(Environment.UserName)}\Desktop\PMTools\Agron";
         // Script/Config 
-        public string ConfigFolder => testFolder + @"\Config";
+        public string ConfigFolder => scriptFolder + @"\Config";
 
 
         //  "F o l d e r   G e n e r a t o r"
@@ -57,11 +57,11 @@ namespace Global
         public string CloFilesCollectionFolder => OutputCollectionsFolder + @"\Collections\clo files";
 
         // regex
-        public string correctFullPathAndRenderNameRegex = 
+        public string correctFullPathAndRenderNameRegex =
             @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)$";
-        public string correctRenderName = 
+        public string correctRenderName =
             @"(?<sku>[0-9A-Za-z]+)_{1}(?<colorCode>[A-Z]+)_{1}((?<variation>[0-9])_)?(?<view>50|60)(?<extension>.png)";
-        public string correctFullPathAndObjNameRegex = 
+        public string correctFullPathAndObjNameRegex =
             @"^(?<path>.:\\.+\\)?(?<sku>[0-9A-Za-z]+)_{1}(?<cameraMarker>[S,M,L,D]{1,})(?<extension>.obj)$";
         public string correctFullPathAndCloFileNameRegex =
             @"^(?<path>.:\\.+\\)?(?<geometry>[A-Z0-9]+)_(?<sku>[0-9A-Za-z]+)_(?<garmentInfo>[A-Za-z0-9_\-\s]+)_(?<variation>[0-9]{1})(?<extension>.zprj)$";
@@ -75,6 +75,8 @@ namespace Global
         public string cloFilesFolder = @"\02_CloFiles";
         public string oldFolder = @"\Old";
         public string archiveFolder = @"\Archive";
+
+        public string[] NotAllowedFolders = { "\\Archive\\", "\\01_References_LA\\", "\\03_Export_For_Texturing\\", "\\04_Assets\\", "\\05_Blender_Scene\\", "\\06_Maps\\", "\\10_MailOut\\", "\\Old\\" };
 
         public string getAssetsOptions = "\nOPTIONS: \n " +
                                          "[ --- [1] Collect ALL RENDERS --- ] \n " +
