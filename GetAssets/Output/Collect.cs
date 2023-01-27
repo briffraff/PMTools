@@ -174,22 +174,9 @@ namespace GetAssets.Output
                 // Get renders from given date or range
                 Console.WriteLine("---> date format: 20/01/2023 <---");
 
-                Console.Write("Date from : ");
-                var getDateFrom = Console.ReadLine().Split(new char[] { '/', '.', ',', '\\', '-' });
-                var day = Int32.Parse(getDateFrom[0]);
-                var month = Int32.Parse(getDateFrom[1]);
-                var year = Int32.Parse(getDateFrom[2]);
-                var date = new DateTime(year, month, day).ToString().Replace("12:00:00 AM", "01:00:00 AM");
-                var dateFrom = DateTime.Parse(date);
-
-                Console.Write("Date to : ");
-                var getDateTo = Console.ReadLine().Split(new char[] { '/', '.', ',', '\\', '-' });
-                var dayTo = Int32.Parse(getDateTo[0]);
-                var monthTo = Int32.Parse(getDateTo[1]);
-                var yearTo = Int32.Parse(getDateTo[2]);
-                var dateToo = new DateTime(yearTo, monthTo, dayTo).ToString().Replace("12:00:00 AM", "23:59:59 PM");
-                var dateTo = DateTime.Parse(dateToo);
-
+                var dates = GetDates();
+                DateTime dateFrom = dates[0];
+                DateTime dateTo = dates[1];
 
                 //foreach (var render in renders)
                 //{
@@ -198,7 +185,7 @@ namespace GetAssets.Output
                 //        Console.WriteLine(render.Value[1]);
                 //    }
                 //}
-                
+
                 var rendersAfterGivenDate = renders
                     .Where(r => dateFrom < DateTime.Parse(r.Value[1]) && dateTo > DateTime.Parse(r.Value[1]))
                     .ToDictionary(r => r.Key, v => v.Value);
@@ -441,6 +428,49 @@ namespace GetAssets.Output
                 sw.Flush();
                 sw.Close();
             }
+        }
+
+        private List<DateTime> GetDates()
+        {
+            List<DateTime> dates = new List<DateTime>();
+
+            var day = 0;
+            var month = 0;
+            var year = 0;
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (i == 0) { Console.Write("Date from : "); }
+
+                if (i == 1) { Console.Write("Date to : "); }
+
+                var getDate = Console.ReadLine().Split(new char[] { '/', '.', ',', '\\', '-' });
+                if (getDate.Length == 3)
+                {
+                    day = Int32.Parse(getDate[0]);
+                    month = Int32.Parse(getDate[1]);
+                    year = Int32.Parse(getDate[2]);
+
+                    if (i == 0)
+                    {
+                        var dateFrom = new DateTime(year, month, day).ToString().Replace("12:00:00 AM", "01:00:00 AM");
+                        dates.Add(DateTime.Parse(dateFrom));
+                    }
+
+                    if (i == 1)
+                    {
+                        var dateTo = new DateTime(year, month, day).ToString().Replace("12:00:00 AM", "23:59:59 PM");
+                        dates.Add(DateTime.Parse(dateTo));
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Wrong Format !");
+                }
+            }
+
+            //return datefrom and dateto
+            return dates;
         }
     }
 }
