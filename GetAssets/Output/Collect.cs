@@ -1,11 +1,10 @@
 ﻿using Global;
-using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Security.Cryptography.X509Certificates;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -45,7 +44,7 @@ namespace GetAssets.Output
             //VARS
             var png = _gc.renderExtension;
             var regex = new Regex(_gc.correctFullPathAndRenderNameRegex);
-            var renders = new Dictionary<string, string>();
+            var renders = new Dictionary<string, string[]>();
             renders.Clear();
 
             // is png , trimmed path , match regex
@@ -83,16 +82,16 @@ namespace GetAssets.Output
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
-            FillAssets(correctRenders, renders);
+            FillAssets(correctRenders, renders, false);
 
             // OPTION 1
             if (_option == "1")
             {
                 foreach (var item in renders.Values)
                 {
-                    var filename = Path.GetFileName(item);
+                    var filename = Path.GetFileName(item[0]);
                     var transferTo = Path.Combine(rendersCollectionFolder, filename);
-                    File.Copy(item, transferTo, true);
+                    File.Copy(item[0], transferTo, true);
                 }
             }
 
@@ -157,7 +156,7 @@ namespace GetAssets.Output
                         if (renders.ContainsKey(f))
                         {
                             var dest = Path.Combine(rendersCollectionFolder, f + _gc.renderExtension);
-                            Transfer(renders[f], dest);
+                            Transfer(renders[f][0], dest);
                         }
                         else
                         {
@@ -172,7 +171,44 @@ namespace GetAssets.Output
             //OPTION 3
             if (_option == "3")
             {
-                //TODO GET by Date
+                // Get renders from given date or range
+                Console.WriteLine("---> date format: 20/01/2023 <---");
+
+                Console.Write("Date from : ");
+                var getDateFrom = Console.ReadLine().Split(new char[] { '/', '.', ',', '\\', '-' });
+                var day = Int32.Parse(getDateFrom[0]);
+                var month = Int32.Parse(getDateFrom[1]);
+                var year = Int32.Parse(getDateFrom[2]);
+                var date = new DateTime(year, month, day).ToString().Replace("12:00:00 AM", "01:00:00 AM");
+                var dateFrom = DateTime.Parse(date);
+
+                Console.Write("Date to : ");
+                var getDateTo = Console.ReadLine().Split(new char[] { '/', '.', ',', '\\', '-' });
+                var dayTo = Int32.Parse(getDateTo[0]);
+                var monthTo = Int32.Parse(getDateTo[1]);
+                var yearTo = Int32.Parse(getDateTo[2]);
+                var dateToo = new DateTime(yearTo, monthTo, dayTo).ToString().Replace("12:00:00 AM", "23:59:59 PM");
+                var dateTo = DateTime.Parse(dateToo);
+
+
+                //foreach (var render in renders)
+                //{
+                //    if (dateFrom < DateTime.Parse(render.Value[1]) && dateTo > DateTime.Parse(render.Value[1]))
+                //    {
+                //        Console.WriteLine(render.Value[1]);
+                //    }
+                //}
+                
+                var rendersAfterGivenDate = renders
+                    .Where(r => dateFrom < DateTime.Parse(r.Value[1]) && dateTo > DateTime.Parse(r.Value[1]))
+                    .ToDictionary(r => r.Key, v => v.Value);
+
+                foreach (var item in rendersAfterGivenDate.Values)
+                {
+                    var filename = Path.GetFileName(item[0]);
+                    var transferTo = Path.Combine(rendersCollectionFolder, filename);
+                    File.Copy(item[0], transferTo, true);
+                }
             }
 
             // write "not transferred" to external file
@@ -192,7 +228,7 @@ namespace GetAssets.Output
             var obj = _gc.objExtension;
 
             var regex = new Regex(_gc.correctFullPathAndObjNameRegex);
-            var objs = new Dictionary<string, string>();
+            var objs = new Dictionary<string, string[]>();
             objs.Clear();
 
             //filter all files from 09_Renders folder which is correct
@@ -223,7 +259,7 @@ namespace GetAssets.Output
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
-            FillAssets(correctAssets, objs);
+            FillAssets(correctAssets, objs, true);
 
             // OPTION 4
             if (_option == "4")
@@ -235,9 +271,9 @@ namespace GetAssets.Output
                     var found = objs.Keys.FirstOrDefault(o => o.StartsWith(row));
                     if (found != null)
                     {
-                        var filename = found + _gc.objExtension;
+                        var filename = Path.GetFileName(objs[found][0]);
                         var transferTo = Path.Combine(objCollectionFolder, filename);
-                        Transfer(objs[found], transferTo);
+                        Transfer(objs[found][0], transferTo);
                     }
                     else
                     {
@@ -278,7 +314,7 @@ namespace GetAssets.Output
             var cloFiles = _gc.cloExtension;
 
             var regex = new Regex(_gc.correctFullPathAndCloFileNameRegex);
-            var clos = new Dictionary<string, string>();
+            var clos = new Dictionary<string, string[]>();
             clos.Clear();
 
             //filter all files from 09_Renders folder which is correct
@@ -310,9 +346,9 @@ namespace GetAssets.Output
                 .ToHashSet();
 
             // collect all renders with proper names in a dictionary string,string
-            FillAssets(correctAssets, clos);
+            FillAssets(correctAssets, clos, true);
 
-            // OPTION 4
+            // OPTION 5
             if (_option == "5")
             {
                 string[] text = File.ReadAllLines(externalCloFilesFile).Distinct().ToArray();
@@ -322,9 +358,9 @@ namespace GetAssets.Output
                     var found = clos.Keys.FirstOrDefault(key => key.Contains(row));
                     if (found != null)
                     {
-                        var filename = found + _gc.cloExtension;
+                        var filename = Path.GetFileName(clos[found][0]);
                         var transferTo = Path.Combine(cloFilesCollectionFolder, filename);
-                        Transfer(clos[found], transferTo);
+                        Transfer(clos[found][0], transferTo);
                     }
                     else
                     {
@@ -336,13 +372,25 @@ namespace GetAssets.Output
             NotTransferredToFile(_notTransfered, _gc.NotTransferredFileList);
         }
 
-        private static void FillAssets(HashSet<string> correctAssets, Dictionary<string, string> assets)
+        private static void FillAssets(HashSet<string> correctAssets, Dictionary<string, string[]> assets, bool dateComparable)
         {
             // collect all renders with proper names in a dictionary string,string
             foreach (var asset in correctAssets)
             {
+                var fileInfo = File.GetCreationTime(asset);
+
                 //123345_W_5_50
                 var filename = Path.GetFileNameWithoutExtension(asset);
+
+                var isProject = asset.Contains(".zprj");
+                var isObj = asset.Contains(".obj");
+                var isRender = asset.Contains(".png");
+
+                if (dateComparable && isProject)
+                {
+                    filename = filename.Remove(filename.Length - 2, 2);
+                }
+
                 //C:\example\ad\asd\asd\
                 var assetPath = Path.GetDirectoryName(asset);
                 //123345
@@ -354,7 +402,18 @@ namespace GetAssets.Output
                     // && if filename is not contains in renders dict
                     if (assetPath != null && assetPath.Contains(sku) && !assets.ContainsKey(filename))
                     {
-                        assets[filename] = asset;
+                        assets[filename] = new string[] { asset, fileInfo.ToString() };
+                    }
+                    else if (dateComparable)
+                    {
+                        // compare file dates of new and old files
+                        var isNewest = DateTime.Parse(assets[filename][1]) < fileInfo;
+
+                        // if date is newest (new file) overwrite file into the dictionary
+                        if (isNewest)
+                        {
+                            assets[filename] = new string[] { asset, fileInfo.ToString() };
+                        }
                     }
                 }
             }

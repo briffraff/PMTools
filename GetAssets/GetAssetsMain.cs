@@ -42,7 +42,7 @@ namespace GetAssets
             {
                 var collect = new Collect(root, option);
 
-                if (option == "1" || option == "2" || option == "2") 
+                if (option == "1" || option == "2" || option == "3") 
                 {
                     // GET RENDERS
                     collect.Renders(_gc.ExternalRenderList, _gc.RendersCollectionFolder);

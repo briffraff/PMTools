@@ -24,6 +24,7 @@ namespace FolderGenerator.Input
             {
                 [_gc.nike] = new Dictionary<string, List<string>>
                 {
+                    ["Archive"] = new List<string>(),
                     ["DXF"] = new List<string>(),
                     ["FBX"] = new List<string>(),
                     ["Garments"] = new List<string>(),
@@ -34,6 +35,7 @@ namespace FolderGenerator.Input
                 },
                 [_gc.agronsocks] = new Dictionary<string, List<string>>()
                 {
+                    ["Archive"] = new List<string>(),
                     ["01_References_LA"] = new List<string>(),
                     ["02_CloFiles"] = new List<string>(),
                     ["03_Export_For_Texturing"] = new List<string>(),
@@ -45,6 +47,7 @@ namespace FolderGenerator.Input
                 },
                 [_gc.agronequipment] = new Dictionary<string, List<string>>()
                 {
+                    ["Archive"] = new List<string>(),
                     ["DXF"] = new List<string>(),
                     ["Garment"] = new List<string>(),
                     ["GLB"] = new List<string>(),
