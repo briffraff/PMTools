@@ -23,8 +23,8 @@ namespace Global
 
         // folders
         // Script/
-        //public string scriptFolder = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\PMTools\Agron";
-        public string scriptFolder = @"C:\Users\riffraff\Desktop\New folder\Test\PMTools";
+        public string scriptFolder = @"M:\Z_Software Assets\3ds Max\BorakaScriptPack_vol1\PMTools\Agron";
+        //public string scriptFolder = @"C:\Users\riffraff\Desktop\New folder\Test\PMTools";
         public string testFolder = @$"C:\Users\{string.Format(Environment.UserName)}\Desktop\PMTools\Agron";
         // Script/Config 
         public string ConfigFolder => scriptFolder + @"\Config";
@@ -71,6 +71,7 @@ namespace Global
         public string renderExtension = ".png";
         public string objExtension = ".obj";
         public string cloExtension = ".zprj";
+
         public string renderFolder = @"\09_Renders";
         public string forRenderingFolder = @"\07_For_Rendering";
         public string cloFilesFolder = @"\02_CloFiles";
